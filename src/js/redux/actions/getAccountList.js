@@ -9,4 +9,16 @@ export const getAccountList = () => dispatch => {
     failure: types.ACCOUNT_LIST_FAILURE,
     dispatch,
   })
-}
+};
+
+export const getTimelineList = () => dispatch => {
+  dispatch({ type: types.TIMELINE_LIST_REQUEST })
+  get({
+    url: urls.TIMELINELIST,
+    success: types.TIMELINE_LIST_SUCCESS,
+    failure: types.TIMELINE_LIST_FAILURE,
+    dispatch,
+  })
+};
+
+
