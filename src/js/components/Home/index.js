@@ -7,30 +7,52 @@ import AccountList from './partial/AccountList';
 
 import { connect } from "react-redux";
 
-import { getAccountList, getTimelineList } from "../../redux/actions/getAccountList";
+import { getAccountList, getTimelineList, showNewComponent, hideComponent } from "../../redux/actions/getAccountList";
 
 @connect((store) => {
   console.log(store);
   return {
     timelineList: store.timelineList.timelineList,
+    timeFetched: store.timelineList.fetched,
+    
+
     accountList: store.accountList.accountList,
     err: store.accountList.err,
     fetching: store.accountList.fetching,
-    fetched: store.timelineList.fetched
+
+    showcomponent: store.componentReducer.showComponent
+    
   };
 })
 
 
 class Home extends Component {
+  constructor() {
+    super();
+    this._hideComponent = this._hideComponent.bind(this);
+    this._showComponent = this._showComponent.bind(this);
+  }
+  
   componentDidMount() {
     this.props.dispatch(getAccountList());
     this.props.dispatch(getTimelineList());
   }
+
+  _showComponent() {
+    this.props.dispatch(showNewComponent());
+  }
+
+  _hideComponent() {
+    this.props.dispatch(hideComponent());
+  }
+
+  
+
   render() {
-    const { accountList, timelineList, fetched } = this.props;
+    const { accountList, timelineList, timeFetched, showcomponent } = this.props;
 
     let data = [];
-    if (fetched) {
+    if (timeFetched) {
       _.map(accountList.accounts, account => {
         let obj = {
           'id': account.id,
@@ -46,11 +68,19 @@ class Home extends Component {
     }
 
     console.log(data);
+    
+    let accountData = '';
+
+    if (showcomponent) {
+      accountData = <AccountList accounts={accountList} />;
+    } else {
+      accountData = 'account not found';
+    }
 
     return (
       <div>
-        <Hero />
-        <AccountList accounts={accountList} />
+        <Hero show={this._showComponent} hide={this._hideComponent} />
+        {accountData}
       </div>
     );
   }

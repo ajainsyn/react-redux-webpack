@@ -22,3 +22,13 @@ export const getTimelineList = () => dispatch => {
 };
 
 
+
+
+export const showNewComponent = () => dispatch => {
+  dispatch({ type: types.SHOW_NEW_COMPONENT })
+};
+
+export const hideComponent = () => dispatch => {
+  dispatch({ type: types.HIDE_NEW_COMPONENT })
+};
+
